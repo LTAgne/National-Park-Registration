@@ -11,6 +11,9 @@ public class Campground {
 	private String openFromMM;
 	private String openToMM;
 	private BigDecimal dailyFee;
+
+//Purely for reservation selection, may be refactored
+	private int displayListLocation;
 	
 //Getters and Setters
 	public Long getCampgroundId() {
@@ -48,6 +51,12 @@ public class Campground {
 	}
 	public void setDailyFee(BigDecimal dailyFee) {
 		this.dailyFee = dailyFee;
+	}
+	public int getDisplayListLocation() {
+		return displayListLocation;
+	}
+	public void setDisplayListLocation(int displayListLocation) {
+		this.displayListLocation = displayListLocation;
 	}
 
 }

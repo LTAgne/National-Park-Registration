@@ -13,16 +13,18 @@ import com.techelevator.projects.model.ParkDao;
 
 public class ParkJdbcDao implements ParkDao{
 	
-
+//Instance Variables
 	private JdbcTemplate jdbcTemplate;
-	
+
+//Constructor
 	public ParkJdbcDao (DataSource dataSource){
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
-	
+
+//Public Methods
 	public List<Park> getAllParks(){
 		List<Park> parkList = new ArrayList<>();
-		String sqlGetAllParks = "SELECT * FROM park";
+		String sqlGetAllParks = "SELECT * FROM park ORDER BY name";
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetAllParks);
 		while(results.next()){
 			parkList.add(mapRowToPark(results));
@@ -52,7 +54,8 @@ public class ParkJdbcDao implements ParkDao{
 		returnPark.setParkId(results.getLong("park_id"));
 		return returnPark;
 	}
-	
+
+//Unused, may be implemented at a later date
 	public Park createPark(String name, String location, LocalDate establishDate, int area, int visitors, String description){
 			Park park = new Park();
 			park.setName(name);
@@ -66,6 +69,8 @@ public class ParkJdbcDao implements ParkDao{
 			park.setParkId(jdbcTemplate.queryForObject(sqlCreatePark,Long.class, name, location, establishDate, area, visitors, description));
 			return park;
 	}
+	
+//Private Methods
 	private Park mapRowToPark(SqlRowSet results) {
 		Park thePark = new Park();
 		thePark.setParkId(results.getLong("park_id"));

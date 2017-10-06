@@ -1,7 +1,10 @@
 package com.techelevator;
 
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
@@ -71,7 +74,7 @@ public class CampgroundCLI {
 	}
 	
 	public void run() {
-		//displayApplicationBanner();	
+			
 		while(true) {
 			printHeading("Select a Park for Further Details");
 			String[] options = appendQuitToStringArray(parkDao.getParksListToNameArray(parkDao.getAllParks()));
@@ -87,6 +90,8 @@ public class CampgroundCLI {
 	}
 	
 	
+
+
 //Private Sub-Menu Handling	
 	private void handleParks(String parkName) {
 		printHeading(parkName);
@@ -182,7 +187,7 @@ public class CampgroundCLI {
 			System.out.println("There are no available sites during that time.  Please select another date or campground.");
 			return;
 		}
-		displaySites(availableSites, selectedCampground);
+		displaySites(availableSites, selectedCampground, dr);
 		
 		System.out.println("\n Which site should be reserved? (Enter 0 to Cancel)");
 		userInput = input.nextLine();
@@ -213,7 +218,7 @@ public class CampgroundCLI {
 		return;
 	}
 	
-	private void displaySites(List<Site> siteList, Campground c){
+	private void displaySites(List<Site> siteList, Campground c, DesiredReservation dr){
 		System.out.println(String.format("%15s", "Site No.") + String.format("%20s", "Max Occupancy") + String.format("%20s", "ADA Accessible?") + String.format("%20s", "Max RV Length") + String.format("%20s", "Utility") + String.format("%20s", "Cost"));
 		for(int i = 0; i < siteList.size(); i++){
 			System.out.println(String.format("%15s", siteList.get(i).getSiteNumber()) 
@@ -221,7 +226,7 @@ public class CampgroundCLI {
 							+ String.format("%20s", siteList.get(i).isAccessible())
 									+ String.format("%20s", siteList.get(i).getMaxRvLength())
 										+ String.format("%20s", siteList.get(i).isUtilities())
-											+  String.format("%20s", "$" + c.getDailyFee()));
+											+  String.format("%20s", "$" + c.getDailyFee().multiply(new BigDecimal(Period.between(dr.getArrivalDate(), dr.getDepartureDate()).getDays()-1)) + "0"));
 		}
 		return;
 	}
